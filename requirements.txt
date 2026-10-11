@@ -1,0 +1,15 @@
+# BovinoVision AI - dependências
+# Python recomendado: 3.12 (64 bits)
+# Versões testadas neste projeto: PySide6 6.x, opencv-python 4.x, torch 2.14.1+cu126,
+# torchvision 0.29.1+cu126, ultralytics 8.4.175
+PySide6>=6.6,<7
+opencv-python>=4.9,<5
+numpy>=1.26,<3
+ultralytics>=8.3
+pytest>=8,<9
+
+# PyTorch NÃO é instalado por este arquivo, pois depende do computador.
+# Com GPU NVIDIA (CUDA):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+# Somente CPU (menor):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu

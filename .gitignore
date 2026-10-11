@@ -1,0 +1,45 @@
+# Ambiente Virtual
+.venv/
+venv/
+ENV/
+
+# Cache Python e Testes
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Compilações do PyInstaller
+build/
+dist/
+
+# Pesos de Modelos (baixados automaticamente pelo script ou treinados)
+models/*
+!models/.gitkeep
+*.pt
+*.onnx
+*.engine
+
+# Pastas de dados e vídeos locais
+data/videos/*
+!data/videos/.gitkeep
+data/datasets/*
+!data/datasets/.gitkeep
+data/sessions/*
+!data/sessions/.gitkeep
+
+# Arquivos de mídia e banco de dados local
+*.db
+*.sqlite3
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Temporários e logs
+scratch_*
+*.log
+out.txt
+err.txt
+.idea/
+.vscode/
