@@ -49,7 +49,7 @@ Ideal para computadores com Python instalado, sem precisar abrir o terminal.
 
 ```powershell
 # 1. Clonar o repositório
-git clone https://github.com/SEU_USUARIO/bovinovision.git
+git clone https://github.com/jpasx/bovinovision.git
 cd bovinovision
 
 # 2. Criar e ativar o ambiente virtual
