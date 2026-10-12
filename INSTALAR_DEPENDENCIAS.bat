@@ -18,63 +18,51 @@ set "PY_EXE="
 
 :: 1. Tenta comando python direto no PATH
 python --version >nul 2>&1
-if %errorlevel% equ 0 (
-    set "PY_EXE=python"
-    goto PYTHON_ENCONTRADO
-)
+if %errorlevel% equ 0 set "PY_EXE=python"
+if defined PY_EXE goto PYTHON_ENCONTRADO
 
 :: 2. Tenta o Launcher oficial do Windows (py.exe)
 py -3 --version >nul 2>&1
-if %errorlevel% equ 0 (
-    set "PY_EXE=py -3"
-    goto PYTHON_ENCONTRADO
-)
+if %errorlevel% equ 0 set "PY_EXE=py -3"
+if defined PY_EXE goto PYTHON_ENCONTRADO
 
 :: 3. Procura automaticamente na pasta padrao do usuario (AppData\Local\Programs\Python)
 for /d %%D in ("%LOCALAPPDATA%\Programs\Python\Python3*") do (
-    if exist "%%D\python.exe" (
-        set "PY_EXE=%%D\python.exe"
-        goto PYTHON_ENCONTRADO
-    )
+    if exist "%%D\python.exe" set "PY_EXE=%%D\python.exe"
 )
+if defined PY_EXE goto PYTHON_ENCONTRADO
 
 :: 4. Procura em Program Files
 for /d %%D in ("%ProgramFiles%\Python3*") do (
-    if exist "%%D\python.exe" (
-        set "PY_EXE=%%D\python.exe"
-        goto PYTHON_ENCONTRADO
-    )
+    if exist "%%D\python.exe" set "PY_EXE=%%D\python.exe"
 )
+if defined PY_EXE goto PYTHON_ENCONTRADO
 
-if not defined PY_EXE (
-    echo ======================================================
-    echo [ERRO] O Python nao foi encontrado no seu computador!
-    echo ======================================================
-    echo.
-    echo O instalador do Python precisa que a opcao PATH esteja ativa.
-    echo.
-    echo Como resolver em 30 segundos:
-    echo 1. Abra novamente o instalador do Python que voce baixou.
-    echo 2. Clique em "Modify" (ou reinstale).
-    echo 3. Avance ate a tela que tem:
-    echo    "[x] Add Python to environment variables"
-    echo    e marque essa opcao!
-    echo.
-    echo Ou baixe em: https://www.python.org/downloads/
-    echo ======================================================
-    echo.
-    pause
-    exit /b 1
-)
+echo ======================================================
+echo [ERRO] O Python nao foi encontrado no seu computador!
+echo ======================================================
+echo.
+echo O instalador do Python precisa que a opcao PATH esteja ativa.
+echo.
+echo Como resolver em 30 segundos:
+echo 1. Abra novamente o instalador do Python que voce baixou.
+echo 2. Clique em "Modify" (ou reinstale).
+echo 3. Avance ate a tela que tem:
+echo    "[x] Add Python to environment variables"
+echo    e marque essa opcao!
+echo.
+echo Ou baixe em: https://www.python.org/downloads/
+echo ======================================================
+echo.
+pause
+exit /b 1
 
 :PYTHON_ENCONTRADO
 echo [OK] Python localizado com sucesso!
 echo.
 
 echo [1/5] Criando ambiente virtual isolado (.venv)...
-if not exist ".venv" (
-    "%PY_EXE%" -m venv .venv
-)
+if not exist ".venv" "%PY_EXE%" -m venv .venv
 
 echo [2/5] Atualizando gerenciador de pacotes...
 call .\.venv\Scripts\python.exe -m pip install --upgrade pip
