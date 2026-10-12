@@ -6,6 +6,13 @@ echo ======================================================
 echo       Instalacao de Dependencias - BovinoVision AI
 echo ======================================================
 echo.
+echo [!] AVISO: As bibliotecas de Inteligencia Artificial (PyTorch)
+echo     possuem cerca de 2.5 GB. O download costuma levar de 3 a 8 minutos.
+echo.
+echo     Por favor, NAO FECHE esta janela preta ate ver a mensagem:
+echo     "Instalacao concluida com sucesso!"
+echo ======================================================
+echo.
 
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -27,21 +34,39 @@ if not exist ".venv" (
 )
 
 echo [2/5] Atualizando gerenciador de pacotes...
-call .\.venv\Scripts\python.exe -m pip install --upgrade pip --quiet
+call .\.venv\Scripts\python.exe -m pip install --upgrade pip
 
+echo.
 echo [3/5] Verificando placa de video NVIDIA para aceleracao GPU...
 where nvidia-smi >nul 2>&1
 if %errorlevel% equ 0 (
-    echo Placa NVIDIA detectada. Instalando PyTorch com aceleracao GPU (CUDA)...
+    echo Placa NVIDIA detectada. Baixando PyTorch com aceleracao GPU (CUDA 12.4)...
+    echo (Aguarde o download da barra de progresso, cerca de 2.5 GB...)
     call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
 ) else (
-    echo Nenhuma placa NVIDIA detectada. Instalando PyTorch otimizado para CPU...
+    echo Nenhuma placa NVIDIA detectada. Baixando PyTorch otimizado para CPU...
+    echo (Aguarde o download, cerca de 200 MB...)
     call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 )
 
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERRO] Ocorreu uma falha ao baixar o PyTorch. Verifique sua conexao com a internet.
+    pause
+    exit /b 1
+)
+
+echo.
 echo [4/5] Instalando bibliotecas do projeto (PySide6, OpenCV, Ultralytics)...
 call .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERRO] Falha ao instalar as dependencias complementares.
+    pause
+    exit /b 1
+)
 
+echo.
 echo [5/5] Verificando modelos de Inteligencia Artificial...
 if not exist "models\bovinos_aereo.pt" (
     echo Baixando modelo aereo especializado de bovinos...
