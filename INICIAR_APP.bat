@@ -38,6 +38,9 @@ pause
 exit /b 1
 
 :RODAR
+echo Carregando Inteligencia Artificial e abrindo a tela...
+echo (Aguarde cerca de 10 a 20 segundos, a janela vai abrir em instantes!)
+echo.
 call .\.venv\Scripts\python.exe main.py
 if %errorlevel% neq 0 (
     echo.
