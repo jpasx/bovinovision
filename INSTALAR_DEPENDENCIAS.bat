@@ -39,16 +39,22 @@ call .\.venv\Scripts\python.exe -m pip install --upgrade pip
 echo.
 echo [3/5] Verificando placa de video NVIDIA para aceleracao GPU...
 where nvidia-smi >nul 2>&1
-if %errorlevel% equ 0 (
-    echo Placa NVIDIA detectada. Baixando PyTorch com aceleracao GPU (CUDA 12.4)...
-    echo (Aguarde o download da barra de progresso, cerca de 2.5 GB...)
-    call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-) else (
-    echo Nenhuma placa NVIDIA detectada. Baixando PyTorch otimizado para CPU...
-    echo (Aguarde o download, cerca de 200 MB...)
-    call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-)
+if %errorlevel% equ 0 goto COM_GPU
+goto SEM_GPU
 
+:COM_GPU
+echo Placa NVIDIA detectada. Baixando PyTorch com aceleracao GPU CUDA 12.4...
+echo Aguarde o download da barra de progresso, cerca de 2.5 GB...
+call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+goto DEPOIS_TORCH
+
+:SEM_GPU
+echo Nenhuma placa NVIDIA detectada. Baixando PyTorch otimizado para CPU...
+echo Aguarde o download, cerca de 200 MB...
+call .\.venv\Scripts\python.exe -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+goto DEPOIS_TORCH
+
+:DEPOIS_TORCH
 if %errorlevel% neq 0 (
     echo.
     echo [ERRO] Ocorreu uma falha ao baixar o PyTorch. Verifique sua conexao com a internet.
